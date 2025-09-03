@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PX to VW or VH (1920×1080)</title>
+  <style>
+    :root{
+      --bg:#0b1020; --surface:#10162a; --surface2:#141c34;
+      --text:#ecf0f3; --muted:#98a3b3; --accent:#58b4ff; --accent2:#37e0d2;
+      --border:rgba(255,255,255,.08); --ring:rgba(88,180,255,.35);
+      --radius:16px; --radius-lg:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center; padding:28px;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(55,224,210,.12), transparent 60%),
+        radial-gradient(1000px 500px at 120% 20%, rgba(88,180,255,.10), transparent 60%),
+        var(--bg);
+    }
+    .card{
+      width:min(760px,100%); background:linear-gradient(180deg,var(--surface),var(--surface2));
+      border:1px solid var(--border); border-radius:var(--radius-lg); padding:clamp(18px,3.5vw,28px);
+    }
+    h1{margin:0 0 4px; font-size:clamp(18px,2.4vw,24px)}
+    .sub{color:var(--muted); margin:6px 0 0; font-size:.95rem}
+    .grid{display:grid; gap:16px; grid-template-columns:1fr; margin-top:18px}
+    @media(min-width:720px){ .grid{grid-template-columns:1fr 1fr} }
+
+    label{display:block; color:var(--muted); font-size:.9rem; margin:8px 0 6px}
+    .field{
+      display:flex; align-items:center; gap:10px; padding:10px 12px;
+      background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:12px;
+      transition:border-color .15s, box-shadow .15s, background .15s;
+    }
+    .field:focus-within{ border-color:var(--accent); box-shadow:0 0 0 6px var(--ring); background:rgba(255,255,255,.05) }
+    input[type="number"]{width:100%; border:0; outline:0; background:transparent; color:var(--text); font-size:1rem; padding:6px 0}
+    input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0 }
+
+    .section{border:1px solid var(--border); border-radius:14px; padding:14px}
+    .row{display:flex; gap:10px; align-items:center; margin-top:10px}
+    .result{
+      flex:1; display:flex; justify-content:space-between; align-items:center; gap:10px;
+      padding:12px 16px; border-radius:12px;
+      background:linear-gradient(180deg, rgba(88,180,255,.10), rgba(55,224,210,.10));
+      border:1px solid rgba(88,180,255,.35); font-weight:800; letter-spacing:.3px;
+    }
+    .value{font-size:clamp(20px,3.4vw,28px)}
+    .btn{
+      appearance:none; border:0; cursor:pointer; white-space:nowrap;
+      padding:12px 14px; border-radius:12px; font-weight:700; letter-spacing:.2px;
+      color:#001018; background:linear-gradient(180deg,var(--accent),var(--accent2));
+      box-shadow:0 10px 24px rgba(88,180,255,.28);
+      transition:transform .08s, filter .15s, box-shadow .2s;
+    }
+    .btn:hover{ filter:brightness(1.05); box-shadow:0 12px 28px rgba(88,180,255,.33) }
+    .btn:active{ transform:translateY(1px) }
+    .hint{color:var(--muted); font-size:.85rem; margin-top:8px}
+    .footer{display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap; margin-top:16px; color:var(--muted); font-size:.9rem}
+    code{background:rgba(255,255,255,.06); padding:2px 6px; border-radius:8px; border:1px solid var(--border)}
+  </style>
+</head>
+<body>
+  <main class="card" role="region" aria-labelledby="title">
+    <h1 id="title">PX to VW / VH Calculator</h1>
+    <p class="sub">Assuming a fixed <strong>1920×1080</strong> viewport. Use either calculator and toggle precision below</p>
+
+    <div class="grid" id="app">
+      <section class="section" aria-labelledby="vwTitle">
+        <h2 id="vwTitle" style="margin:6px 0 0; font-size:1.05rem;">PX to VW</h2>
+        <p class="hint" style="margin-top:4px;">Formula: <code>vw = (px / 1920) × 100</code> (1vw = 19.2px)</p>
+
+        <label for="pxVW">Pixels (px)</label>
+        <div class="field">
+          <input id="pxVW" type="number" inputmode="decimal" placeholder="e.g., 16" min="0" step="0.01" />
+        </div>
+
+        <div class="row">
+          <div class="result">
+            <span class="value" id="vwOut">0.000vw</span>
+            <button class="btn" id="copyVW">Copy</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="vhTitle">
+        <h2 id="vhTitle" style="margin:6px 0 0; font-size:1.05rem;">PX to VH</h2>
+        <p class="hint" style="margin-top:4px;">Formula: <code>vh = (px / 1080) × 100</code> (1vh = 10.8px)</p>
+
+        <label for="pxVH">Pixels (px)</label>
+        <div class="field">
+          <input id="pxVH" type="number" inputmode="decimal" placeholder="e.g., 24" min="0" step="0.01" />
+        </div>
+
+        <div class="row">
+          <div class="result">
+            <span class="value" id="vhOut">0.000vh</span>
+            <button class="btn" id="copyVH">Copy</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="section" style="margin-top:16px">
+      <label for="precision">Decimal places (applies to both)</label>
+      <div class="field">
+        <input id="precision" type="number" value="3" min="0" max="8" />
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Width: 1920px -> <code>vw</code></span>
+      <span>Height: 1080px -> <code>vh</code></span>
+      <span>Reverse: <code>px = (vw × 1920)/100</code> & <code>px = (vh × 1080)/100</code></span>
+    </div>
+  </main>
+
+  <script>
+    const VIEWPORT_WIDTH = 1920;   // px
+    const VIEWPORT_HEIGHT = 1080;  // px
+
+    const pxVW = document.getElementById('pxVW');
+    const pxVH = document.getElementById('pxVH');
+    const precisionInput = document.getElementById('precision');
+    const vwOut = document.getElementById('vwOut');
+    const vhOut = document.getElementById('vhOut');
+    const copyVW = document.getElementById('copyVW');
+    const copyVH = document.getElementById('copyVH');
+
+    const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+
+    function fmt(num, places){
+      const p = clamp(places|0, 0, 8);
+      if (!isFinite(num)) return (0).toFixed(p);
+      return num.toFixed(p);
+    }
+
+    function renderVW(){
+      const px = parseFloat(pxVW.value);
+      const places = parseInt(precisionInput.value, 10);
+      const vw = (px / VIEWPORT_WIDTH) * 100;
+      vwOut.textContent = `${fmt(vw, places)}vw`;
+    }
+
+    function renderVH(){
+      const px = parseFloat(pxVH.value);
+      const places = parseInt(precisionInput.value, 10);
+      const vh = (px / VIEWPORT_HEIGHT) * 100;
+      vhOut.textContent = `${fmt(vh, places)}vh`;
+    }
+
+    // events
+    pxVW.addEventListener('input', renderVW);
+    pxVH.addEventListener('input', renderVH);
+    precisionInput.addEventListener('input', () => { renderVW(); renderVH(); });
+
+    async function copyText(el, btn){
+      const text = el.textContent.trim();
+      try{
+        await navigator.clipboard.writeText(text);
+        const prev = btn.textContent; btn.textContent = 'Copied!';
+        setTimeout(()=> btn.textContent = prev, 900);
+      }catch{
+        const prev = btn.textContent; btn.textContent = 'Press Ctrl+C';
+        setTimeout(()=> btn.textContent = prev, 1200);
+      }
+    }
+    copyVW.addEventListener('click', () => copyText(vwOut, copyVW));
+    copyVH.addEventListener('click', () => copyText(vhOut, copyVH));
+
+    // defaults
+    pxVW.value = '16';
+    pxVH.value = '24';
+    renderVW(); renderVH();
+  </script>
+</body>
+</html>
